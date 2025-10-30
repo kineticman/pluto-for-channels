@@ -14,13 +14,13 @@
 # Running
 Use single quotes around the username and password to avoid conflicts.
 ```
-docker run -d --restart unless-stopped --network=host -e PLUTO_PORT=[your_port_number_here] -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' --name pluto-for-channels rcvaughn2/pluto-for-channels:test
+docker run -d --restart unless-stopped --network=host -e PLUTO_PORT=[your_port_number_here] -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' --name pluto-for-channels rcvaughn2/pluto-for-channels:main
 ```
 
 or
 
 ```
-docker run -d --restart unless-stopped -p [your_port_number_here]:7777 -e PLUTO_USERNAME'[your_username' -e PLUTO_PASSWORD='your_password' --name  pluto-for-channels rcvaughn2/pluto-for-channels:test
+docker run -d --restart unless-stopped -p [your_port_number_here]:7777 -e PLUTO_USERNAME'[your_username' -e PLUTO_PASSWORD='your_password' --name  pluto-for-channels rcvaughn2/pluto-for-channels:main
 ```
 
 You can retrieve the playlist and EPG via the status page.
@@ -36,7 +36,7 @@ version: '3.8'
 
 services:
   pluto-for-channels:
-    image: rcvaughn2/pluto-for-channels:test
+    image: rcvaughn2/pluto-for-channels:main
     container_name: pluto-for-channels
     restart: unless-stopped
     ports:
