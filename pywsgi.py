@@ -243,56 +243,18 @@ def watch(provider, country_code, id):
     stitcher = "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv"
     base_path = f"/stitch/hls/channel/{id}/master.m3u8"
 
-    jwt_required_list = ['625f054c5dfea70007244612', '625f04253e5f6c000708f3b7', '5421f71da6af422839419cb3']
+    # Fetch the token for EVERY channel
+    resp, error = providers[provider].resp_data(country_code)
+    if error: return error, 500
     
-    params = {'advertisingId': '',
-              'appName': 'web',
-              'appVersion': 'unknown',
-              'appStoreUrl': '',
-              'architecture': '',
-              'buildVersion': '',
-              'clientTime': '0',
-              'deviceDNT': '0',
-              'deviceId': client_id,
-              'deviceMake': 'Chrome',
-              'deviceModel': 'web',
-              'deviceType': 'web',
-              'deviceVersion': 'unknown',
-              'includeExtendedEvents': 'false',
-              'sid': sid,
-              'userId': '',
-              'serverSideAds': 'true'
-    }
-
-    if id in jwt_required_list:
-        resp, error= providers[provider].resp_data(country_code)
-        if error: return error, 500
-        # print(json.dumps(resp, indent=2))
-        token = resp.get('sessionToken','')
-        stitcherParams = resp.get("stitcherParams",'')
-        video_url = f'{stitcher}/v2{base_path}?{stitcherParams}&jwt={token}&masterJWTPassthrough=true&includeExtendedEvents=true'
-    else:
-        parsed_url = urlparse(f"{stitcher}{base_path}")
-        base_query_params = parse_qs(parsed_url.query)
-        # Update base query parameters with the provided parameters
-        for key, value in params.items():
-            if key in base_query_params:
-                # Extend the existing values with new values if the parameter already exists
-                base_query_params[key].extend(value)
-            else:
-                # Add new parameter and its values
-                base_query_params[key] = value
-
-        # Construct updated query string
-        updated_query = urlencode(base_query_params, doseq=True)
-
-        # Generate the final URL
-        video_url = urlunparse((parsed_url.scheme, parsed_url.netloc, parsed_url.path,
-                               parsed_url.params, updated_query, parsed_url.fragment))
+    token = resp.get('sessionToken', '')
+    stitcherParams = resp.get("stitcherParams", '')
+    
+    # Construct the authenticated URL for all streams
+    video_url = f'{stitcher}/v2{base_path}?{stitcherParams}&jwt={token}&masterJWTPassthrough=true&includeExtendedEvents=true'
 
     print(video_url)
-    return (redirect(video_url))
-
+    return redirect(video_url)
 @app.get("/<provider>/epg/<country_code>/<filename>")
 def epg_xml(provider, country_code, filename):
 
@@ -385,5 +347,6 @@ if __name__ == '__main__':
         WSGIServer(('', port), app, log=None).serve_forever()
 
     except OSError as e:
+
 
         print(str(e))
