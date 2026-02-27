@@ -25,9 +25,9 @@ docker run -d --restart unless-stopped -p [your_port_number_here]:7777 -e PLUTO_
 
 You can retrieve the playlist and EPG via the status page.
 
-```
+
 [http://127.0.0.1](http://127.0.0.1):[your_port_number_here]
-```
+
 ### **docker-compose.yml**
 
 
