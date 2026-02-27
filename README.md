@@ -44,13 +44,14 @@ services:
       - "7777:7777"
     environment:
       # Your Pluto TV username. Use single quotes if it contains special characters.
-      - PLUTO_USERNAME='YOUR_USERNAME'
+      PLUTO_USERNAME: YOUR_USERNAME
       # Your Pluto TV password. Use single quotes if it contains special characters.
-      - PLUTO_PASSWORD='YOUR_PASSWORD'
+      PLUTO_PASSWORD: YOUR_PASSWORD
       # Optional: Customize the country codes.
       # Default: 'local,us_east,us_west,ca,uk,fr,de'
-      - PLUTO_CODE='local,us_east,us_west,ca,uk,fr,de'
+      PLUTO_CODE: local,us_east,us_west,ca,uk,fr,de
 ```
+Run `docker compose up -d` in terminal.
 
 ### **How to Use in Portainer**
 
