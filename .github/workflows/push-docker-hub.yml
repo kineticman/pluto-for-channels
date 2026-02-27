@@ -41,7 +41,7 @@ jobs:
         with:
           # This is the full name of the image on Docker Hub.
           # Make sure it matches your Docker Hub username and desired repository name.
-          images: rcvaughn2/pluto-for-channels
+          images: kineticman/pluto-for-channels
 
       # This is the final step that builds the Docker image from your Dockerfile
       # and pushes it to Docker Hub with the tags generated in the previous step.
