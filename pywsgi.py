@@ -238,22 +238,22 @@ def playlist_maddox_compatible(provider, country_code):
 
 @app.route("/<provider>/<country_code>/watch/<id>")
 def watch(provider, country_code, id):
-    client_id = providers[provider].load_device()
     sid = uuid.uuid4()
     stitcher = "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv"
     base_path = f"/stitch/hls/channel/{id}/master.m3u8"
 
-    # Fetch the token for EVERY channel
-    resp, error = providers[provider].resp_data(country_code)
+    # Use a pool slot so each concurrent stream gets its own clientID device identity
+    token, slot_session, error = providers[provider].get_stream_token(country_code)
     if error: return error, 500
-    
-    token = resp.get('sessionToken', '')
+
+    # Get stitcherParams from the same slot's cached response
+    resp = slot_session.response_list.get(country_code, {})
     stitcherParams = resp.get("stitcherParams", '')
-    
+
     # Construct the authenticated URL for all streams
     video_url = f'{stitcher}/v2{base_path}?{stitcherParams}&jwt={token}&masterJWTPassthrough=true&includeExtendedEvents=true'
 
-    print(video_url)
+    print(f"[stream] slot={slot_session.client_id[:8]} channel={id} country={country_code}")
     return redirect(video_url)
 @app.get("/<provider>/epg/<country_code>/<filename>")
 def epg_xml(provider, country_code, filename):
