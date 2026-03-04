@@ -66,7 +66,7 @@ class StreamSession:
             'clientID': self.client_id,              # <-- unique per slot!
             'clientModelNumber': '1.0.0',
             'serverSideAds': 'false',
-            'drmCapabilities': 'widevine:L3',
+            'drmCapabilities': '',
             'blockingMode': '',
             'notificationVersion': '1',
             'appLaunchCount': '',
