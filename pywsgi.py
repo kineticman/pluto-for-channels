@@ -10,7 +10,7 @@ from gevent import monkey
 monkey.patch_all()
 
 
-version = "1.22"
+version = "1.24"
 updated_date = "Sept. 20, 2025"
 
 # Retrieve the port number from env variables
@@ -19,6 +19,11 @@ try:
     port = int(os.environ.get("PLUTO_PORT", 7777))
 except:
     port = 7777
+
+try:
+    channel_start = int(os.environ.get("PLUTO_START", 0))
+except (ValueError, TypeError):
+    channel_start = 0
 
 # Get Username and Password from environment variables
 pluto_username = os.environ.get("PLUTO_USERNAME")
@@ -213,7 +218,7 @@ def playlist(provider, country_code):
         else:
             m3u += f"#EXTINF:-1 channel-id=\"{provider}-{s.get('slug')}\""
         m3u += f" tvg-id=\"{s.get('id')}\""
-        m3u += f" tvg-chno=\"{''.join(map(str, str(s.get('number', []))))}\"" if s.get('number') else ""
+        m3u += f" tvg-chno=\"{''.join(map(str, str(s.get('number', []) + channel_start)))}\"" if s.get('number') else ""
         m3u += f" group-title=\"{''.join(map(str, s.get('group', [])))}\"" if s.get('group') else ""
         m3u += f" tvg-logo=\"{''.join(map(str, s.get('logo', [])))}\"" if s.get('logo') else ""
         m3u += f" tvg-name=\"{''.join(map(str, s.get('tmsid', [])))}\"" if s.get('tmsid') else ""

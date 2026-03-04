@@ -1,9 +1,12 @@
 # Pluto for Channels
 
-**Version 1.23**
+**Version 1.24**
 
 # Changes
 
+ - Version 1.24:
+    - **PLUTO_START support:** Added `PLUTO_START` environment variable to offset all channel numbers by a fixed amount. Useful for avoiding collisions with other sources in Channels DVR.
+    - **DRM fix:** Cleared `drmCapabilities` declaration which was causing false-positive DRM detection on some clients.
  - Version 1.23:
     - **Multi-stream fix:** Replaced single hardcoded `clientID` with a rotating pool of virtual device sessions. Each concurrent stream now uses a unique `clientID`, bypassing Pluto TV's single-stream-per-device limitation. Pool size defaults to 10 simultaneous streams and is configurable via `STREAM_POOL_SIZE` in `pluto.py`.
  - Version 1.22:
@@ -78,7 +81,7 @@ Portainer will now pull the image and create the container with all your specifi
 | PLUTO\_PORT | Port the API will be served on. You can set this if it conflicts with another service in your environment. | 7777 |
 | PLUTO\_USERNAME | Your Pluto TV username. | |
 | PLUTO\_PASSWORD | Your Pluto TV password. | |
-| PLUTO\_PASSWORD | Your Pluto TV password. | |
+| PLUTO\_START | Offset added to all channel numbers. Useful for avoiding collisions with other sources in Channels DVR. Note: applies before per-country offsets (CA +6000, UK +7000, etc.) when using the `all` playlist. | 0 |
 | PLUTO\_CODE | What country streams will be hosted. <br>Multiple can be hosted using comma separation<p><p>ALLOWED\_COUNTRY\_CODES:<br>**us\_east** - United States East Coast,<br>**us\_west** - United States West Coast,<br>**local** - Local IP address Geolocation,<br>**ca** - Canada,<br>**uk** - United Kingdom,<br>**fr** - France,<br>**de** - Germany | local,us\_west,us\_east,ca,uk |
 
 ## Additional URL Parameters
