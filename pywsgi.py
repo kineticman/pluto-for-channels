@@ -10,8 +10,8 @@ from gevent import monkey
 monkey.patch_all()
 
 
-version = "1.24"
-updated_date = "Sept. 20, 2025"
+version = "1.25"
+updated_date = "Mar. 11, 2026"
 
 # Retrieve the port number from env variables
 # Fallback to default if invalid or unspecified
@@ -55,45 +55,161 @@ url = f'<!DOCTYPE html>\
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">\
             <style>\
               body {{ \
-                background-color: #1a1a1a; \
-                color: #f5f5f5; \
+                min-height: 100vh; \
+                background: linear-gradient(180deg, #0f172a 0%, #111827 42%, #1f2937 100%); \
+                color: #e5e7eb; \
               }}\
               .section {{ \
-                padding: 3rem 1.5rem; \
+                padding: 2.5rem 1.25rem 4rem; \
               }}\
-              .title, .subtitle {{ \
-                color: #f5f5f5; \
+              .shell {{ \
+                max-width: 1180px; \
+                margin: 0 auto; \
+              }}\
+              .hero-panel {{ \
+                background: rgba(15, 23, 42, 0.82); \
+                border: 1px solid rgba(148, 163, 184, 0.18); \
+                border-radius: 20px; \
+                padding: 1.5rem; \
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25); \
+                margin-bottom: 1.25rem; \
+              }}\
+              .title, .subtitle, .section-title, .label-title {{ \
+                color: #f8fafc; \
+              }}\
+              .hero-meta {{ \
+                display: flex; \
+                flex-wrap: wrap; \
+                gap: 0.75rem; \
+                align-items: center; \
+                justify-content: space-between; \
+              }}\
+              .hero-copy {{ \
+                color: #cbd5e1; \
+                max-width: 46rem; \
+                margin-top: 0.75rem; \
+              }}\
+              .version-tag {{ \
+                background: #22c55e; \
+                color: #052e16; \
+                font-weight: 700; \
+                border-radius: 999px; \
+                padding: 0.35rem 0.7rem; \
+              }}\
+              .subtle-tag {{ \
+                background: rgba(59, 130, 246, 0.18); \
+                color: #bfdbfe; \
+                border-radius: 999px; \
+                padding: 0.35rem 0.7rem; \
+                font-size: 0.9rem; \
+              }}\
+              .stack {{ \
+                display: flex; \
+                flex-direction: column; \
+                gap: 1rem; \
+              }}\
+              .panel {{ \
+                background: rgba(15, 23, 42, 0.74); \
+                border: 1px solid rgba(148, 163, 184, 0.18); \
+                border-radius: 18px; \
+                padding: 1rem; \
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); \
+              }}\
+              .panel + .panel {{ \
+                margin-top: 1rem; \
+              }}\
+              .section-title {{ \
+                font-size: 1.1rem; \
+                font-weight: 700; \
+                margin-bottom: 0.85rem; \
+                text-align: center; \
+              }}\
+              .admin-grid {{ \
+                display: grid; \
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); \
+                gap: 0.75rem; \
+              }}\
+              .stat-card {{ \
+                background: rgba(30, 41, 59, 0.8); \
+                border: 1px solid rgba(148, 163, 184, 0.14); \
+                border-radius: 14px; \
+                padding: 0.85rem 0.95rem; \
+              }}\
+              .stat-key {{ \
+                color: #93c5fd; \
+                font-size: 0.78rem; \
+                font-weight: 700; \
+                letter-spacing: 0.04em; \
+                text-transform: uppercase; \
+                margin-bottom: 0.3rem; \
+              }}\
+              .stat-value {{ \
+                color: #f8fafc; \
+                font-weight: 600; \
+                word-break: break-word; \
+              }}\
+              .link-list {{ \
+                display: flex; \
+                flex-direction: column; \
+                gap: 0.75rem; \
               }}\
               .list-item {{ \
                 display: flex; \
-                align-items: center; \
+                align-items: flex-start; \
                 justify-content: space-between; \
-                padding: 10px; \
-                border-bottom: 1px solid #363636; \
+                gap: 1rem; \
+                padding: 0.95rem 0; \
+                border-top: 1px solid rgba(148, 163, 184, 0.12); \
               }}\
-              .list-item:last-child {{ \
-                border-bottom: none; \
+              .list-item:first-child {{ \
+                border-top: none; \
+                padding-top: 0; \
+              }}\
+              .item-copy {{ \
+                flex: 1; \
+                min-width: 0; \
+              }}\
+              .label-title {{ \
+                font-weight: 700; \
+                margin-bottom: 0.25rem; \
+              }}\
+              .label-subtitle {{ \
+                color: #94a3b8; \
+                font-size: 0.92rem; \
+                line-height: 1.4; \
               }}\
               a {{ \
-                color: #3273dc; \
+                color: #7dd3fc; \
                 word-break: break-all; \
-                margin-right: 15px; \
+                text-decoration: none; \
               }}\
               a:hover {{ \
-                color: #4e8ff1; \
+                color: #bae6fd; \
               }}\
               .copy-button {{ \
-                background-color: #3273dc; \
+                background: #2563eb; \
                 color: white; \
                 border: none; \
-                padding: 5px 10px; \
-                border-radius: 4px; \
+                padding: 0.6rem 0.85rem; \
+                border-radius: 10px; \
                 cursor: pointer; \
                 transition: background-color 0.3s; \
                 flex-shrink: 0; \
+                font-weight: 600; \
               }}\
               .copy-button:hover {{ \
-                background-color: #4e8ff1; \
+                background: #3b82f6; \
+              }}\
+              .empty-state {{ \
+                color: #fecaca; \
+              }}\
+              @media (max-width: 768px) {{ \
+                .list-item {{ \
+                  flex-direction: column; \
+                }}\
+                .copy-button {{ \
+                  width: 100%; \
+                }}\
               }}\
             </style>\
             <script>\
@@ -115,48 +231,119 @@ url = f'<!DOCTYPE html>\
           </head>\
           <body>\
           <section class="section">\
-            <div class="container">\
-              <h1 class="title">\
-                {provider.capitalize()} Playlist\
-                <span class="tag">v{version}</span>\
-              </h1>\
-              <p class="subtitle">\
-                Last Updated: {updated_date}\
+            <div class="shell">\
+              <div class="hero-panel">\
+                <div class="hero-meta">\
+                  <h1 class="title">\
+                    {provider.capitalize()} Playlist\
+                  </h1>\
+                  <div>\
+                    <span class="version-tag">v{version}</span>\
+                    <span class="subtle-tag">Updated {updated_date}</span>\
+                  </div>\
+                </div>\
+                <p class="hero-copy">\
+                  Status, runtime settings, playlist URLs, and EPG endpoints for this Pluto deployment.\
+                </p>\
+              </div>\
               '
+
+
+def render_link_item(title, description, link):
+    return (
+        f"<div class='list-item'>"
+        f"<div class='item-copy'>"
+        f"<div class='label-title'>{title}</div>"
+        f"<div class='label-subtitle'>{description}</div>"
+        f"<a href='{link}'>{link}</a>"
+        f"</div>"
+        f"<button class='copy-button' onclick=\"copyToClipboard('{link}')\">Copy</button>"
+        f"</div>\n"
+    )
 
 @app.route("/")
 def index():
     host = request.host
-    ul = ""
+    stream_pool_size = len(getattr(providers[provider], "_pool", []))
+    admin_items = [
+        ("PLUTO_PORT", str(port)),
+        ("PLUTO_START", str(channel_start)),
+        ("PLUTO_STREAM_POOL_SIZE", str(stream_pool_size)),
+        ("PLUTO_CODE", ", ".join(pluto_country_list)),
+        ("PLUTO_USERNAME", pluto_username or "(not set)"),
+        ("PLUTO_PASSWORD", "configured" if pluto_password else "(not set)"),
+    ]
+
+    admin_stats = "<div class='panel'><div class='section-title'>Admin</div><div class='admin-grid'>"
+    for key, value in admin_items:
+        admin_stats += (
+            f"<div class='stat-card'>"
+            f"<div class='stat-key'>{key}</div>"
+            f"<div class='stat-value'>{value}</div>"
+            f"</div>\n"
+        )
+    admin_stats += "</div></div>\n"
+
+    sections = ""
+
     if all(item in ALLOWED_COUNTRY_CODES for item in pluto_country_list):
         pl = f"http://{host}/{provider}/all/playlist.m3u"
-        ul += f"<div class='list-item'><span>{provider.upper()} ALL channel_id_format = \"{provider}-{{slug}}\" (default format): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+        all_links = ""
+        all_links += render_link_item(
+            f"{provider.upper()} ALL playlist",
+            f"channel_id_format = \"{provider}-{{slug}}\" (default format)",
+            pl,
+        )
         pl = f"http://{host}/{provider}/all/playlist.m3u?channel_id_format=id"
-        ul += f"<div class='list-item'><span>{provider.upper()} ALL channel_id_format = \"{provider}-{{id}}\" (i.mjh.nz compatibility): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+        all_links += render_link_item(
+            f"{provider.upper()} ALL playlist",
+            f"channel_id_format = \"{provider}-{{id}}\" (i.mjh.nz compatibility)",
+            pl,
+        )
         pl = f"http://{host}/{provider}/all/playlist.m3u?channel_id_format=slug_only"
-        ul += f"<div class='list-item'><span>{provider.upper()} ALL channel_id_format = \"{{slug}}\" (maddox compatibility): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
-        ul += f"<br>\n"
+        all_links += render_link_item(
+            f"{provider.upper()} ALL playlist",
+            "channel_id_format = \"{slug}\" (maddox compatibility)",
+            pl,
+        )
         pl = f"http://{host}/{provider}/epg/all/epg-all.xml"
-        ul += f"<div class='list-item'><span>{provider.upper()} ALL EPG: <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+        all_links += render_link_item(f"{provider.upper()} ALL EPG", "XML guide", pl)
         pl = f"http://{host}/{provider}/epg/all/epg-all.xml.gz"
-        ul += f"<div class='list-item'><span>{provider.upper()} ALL EPG GZ: <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
-        ul += f"<br>\n"
+        all_links += render_link_item(f"{provider.upper()} ALL EPG", "Gzip-compressed XML guide", pl)
+        sections += f"<div class='panel'><div class='section-title'>ALL</div><div class='link-list'>{all_links}</div></div>\n"
+
         for code in pluto_country_list:
+            country_links = ""
             pl = f"http://{host}/{provider}/{code}/playlist.m3u"
-            ul += f"<div class='list-item'><span>{provider.upper()} {code.upper()} channel_id_format = \"{provider}-{{slug}}\" (default format): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+            country_links += render_link_item(
+                f"{provider.upper()} {code.upper()} playlist",
+                f"channel_id_format = \"{provider}-{{slug}}\" (default format)",
+                pl,
+            )
             pl = f"http://{host}/{provider}/{code}/playlist.m3u?channel_id_format=id"
-            ul += f"<div class='list-item'><span>{provider.upper()} {code.upper()} channel_id_format = \"{provider}-{{id}}\" (i.mjh.nz compatibility): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+            country_links += render_link_item(
+                f"{provider.upper()} {code.upper()} playlist",
+                f"channel_id_format = \"{provider}-{{id}}\" (i.mjh.nz compatibility)",
+                pl,
+            )
             pl = f"http://{host}/{provider}/{code}/playlist.m3u?channel_id_format=slug_only"
-            ul += f"<div class='list-item'><span>{provider.upper()} {code.upper()} channel_id_format = \"{{slug}}\" (maddox compatibility): <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
-            ul += f"<br>\n"
+            country_links += render_link_item(
+                f"{provider.upper()} {code.upper()} playlist",
+                "channel_id_format = \"{slug}\" (maddox compatibility)",
+                pl,
+            )
             pl = f"http://{host}/{provider}/epg/{code}/epg-{code}.xml"
-            ul += f"<div class='list-item'><span>{provider.upper()} {code.upper()} EPG: <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
+            country_links += render_link_item(f"{provider.upper()} {code.upper()} EPG", "XML guide", pl)
             pl = f"http://{host}/{provider}/epg/{code}/epg-{code}.xml.gz"
-            ul += f"<div class='list-item'><span>{provider.upper()} {code.upper()} EPG GZ: <a href='{pl}'>{pl}</a></span><button class='copy-button' onclick=\"copyToClipboard('{pl}')\">Copy</button></div>\n"
-            ul += f"<br>\n"
+            country_links += render_link_item(f"{provider.upper()} {code.upper()} EPG", "Gzip-compressed XML guide", pl)
+            sections += f"<div class='panel'><div class='section-title'>{code.upper()}</div><div class='link-list'>{country_links}</div></div>\n"
     else:
-        ul += f"<li>INVALID COUNTRY CODE in \"{', '.join(pluto_country_list).upper()}\"</li>\n"
-    return f"{url}<div class='list'>{ul}</div></div></section></body></html>"
+        sections += (
+            f"<div class='panel empty-state'>"
+            f"INVALID COUNTRY CODE in \"{', '.join(pluto_country_list).upper()}\""
+            f"</div>\n"
+        )
+    return f"{url}{admin_stats}<div class='stack'>{sections}</div></div></section></body></html>"
 
 @app.route("/<country_code>/token")
 def token(country_code):

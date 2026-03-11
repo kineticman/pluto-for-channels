@@ -1,9 +1,11 @@
 # Pluto for Channels
 
-**Version 1.24**
+**Version 1.25**
 
 # Changes
 
+ - Version 1.25:
+    - **Stream pool env var:** Default simultaneous streams increased to 15 and can now be configured with `PLUTO_STREAM_POOL_SIZE` without editing Python files.
  - Version 1.24:
     - **PLUTO_START support:** Added `PLUTO_START` environment variable to offset all channel numbers by a fixed amount. Useful for avoiding collisions with other sources in Channels DVR.
     - **DRM fix:** Cleared `drmCapabilities` declaration which was causing false-positive DRM detection on some clients.
@@ -25,13 +27,13 @@
 # Running
 Use single quotes around the username and password to avoid conflicts.
 ```
-docker run -d --restart unless-stopped --network=host -e PLUTO_PORT=[your_port_number_here] -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' --name pluto-for-channels kineticman/pluto-for-channels:main
+docker run -d --restart unless-stopped --network=host -e PLUTO_PORT=[your_port_number_here] -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' -e PLUTO_STREAM_POOL_SIZE=15 --name pluto-for-channels kineticman/pluto-for-channels:main
 ```
 
 or
 
 ```
-docker run -d --restart unless-stopped -p [your_port_number_here]:7777 -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' --name pluto-for-channels kineticman/pluto-for-channels:main
+docker run -d --restart unless-stopped -p [your_port_number_here]:7777 -e PLUTO_USERNAME='your_username' -e PLUTO_PASSWORD='your_password' -e PLUTO_STREAM_POOL_SIZE=15 --name pluto-for-channels kineticman/pluto-for-channels:main
 ```
 
 You can retrieve the playlist and EPG via the status page.
@@ -56,6 +58,9 @@ services:
       PLUTO_USERNAME: YOUR_USERNAME
       # Your Pluto TV password. Use single quotes if it contains special characters.
       PLUTO_PASSWORD: YOUR_PASSWORD
+      # Optional: Default simultaneous stream pool size.
+      # Default: 15
+      PLUTO_STREAM_POOL_SIZE: 15
       # Optional: Customize the country codes.
       # Default: 'local,us_east,us_west,ca,uk,fr,de'
       PLUTO_CODE: local,us_east,us_west,ca,uk,fr,de
@@ -81,6 +86,7 @@ Portainer will now pull the image and create the container with all your specifi
 | PLUTO\_PORT | Port the API will be served on. You can set this if it conflicts with another service in your environment. | 7777 |
 | PLUTO\_USERNAME | Your Pluto TV username. | |
 | PLUTO\_PASSWORD | Your Pluto TV password. | |
+| PLUTO\_STREAM\_POOL\_SIZE | Maximum number of simultaneous Pluto stream device sessions to keep in the rotation pool. Increase if you need more concurrent streams. | 15 |
 | PLUTO\_START | Offset added to all channel numbers. Useful for avoiding collisions with other sources in Channels DVR. Note: applies before per-country offsets (CA +6000, UK +7000, etc.) when using the `all` playlist. | 0 |
 | PLUTO\_CODE | What country streams will be hosted. <br>Multiple can be hosted using comma separation<p><p>ALLOWED\_COUNTRY\_CODES:<br>**us\_east** - United States East Coast,<br>**us\_west** - United States West Coast,<br>**local** - Local IP address Geolocation,<br>**ca** - Canada,<br>**uk** - United Kingdom,<br>**fr** - France,<br>**de** - Germany | local,us\_west,us\_east,ca,uk |
 
@@ -92,10 +98,16 @@ Portainer will now pull the image and create the container with all your specifi
 
 ## Multi-Stream Configuration
 
-By default, 10 simultaneous streams are supported. To change this, edit `STREAM_POOL_SIZE` at the top of `pluto.py`:
+By default, 15 simultaneous streams are supported. To change this, set `PLUTO_STREAM_POOL_SIZE` when starting the container:
 
-```python
-STREAM_POOL_SIZE = 10   # increase for more concurrent streams
+```bash
+docker run -d --restart unless-stopped --network=host \
+  -e PLUTO_PORT=[your_port_number_here] \
+  -e PLUTO_USERNAME='your_username' \
+  -e PLUTO_PASSWORD='your_password' \
+  -e PLUTO_STREAM_POOL_SIZE=30 \
+  --name pluto-for-channels \
+  kineticman/pluto-for-channels:main
 ```
 
 Each pool slot authenticates independently as a separate virtual device. Tokens are cached and refreshed every 4 hours, so the overhead of a larger pool is minimal.

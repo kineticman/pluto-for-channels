@@ -1,4 +1,4 @@
-import uuid, requests, json, pytz, gzip, re
+import os, uuid, requests, json, pytz, gzip, re
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
 import threading
@@ -13,11 +13,16 @@ import threading
 # randomly-generated clientID.  Stream requests round-robin through the pool
 # so every concurrent stream appears as a different device to Pluto.
 #
-# Set STREAM_POOL_SIZE to however many simultaneous streams you need.
+# Set PLUTO_STREAM_POOL_SIZE to however many simultaneous streams you need.
 # Each slot uses its own HTTP session + auth token so they are truly isolated.
 # ---------------------------------------------------------------------------
 
-STREAM_POOL_SIZE = 10   # adjust to taste
+DEFAULT_STREAM_POOL_SIZE = 15
+
+try:
+    STREAM_POOL_SIZE = max(1, int(os.environ.get("PLUTO_STREAM_POOL_SIZE", DEFAULT_STREAM_POOL_SIZE)))
+except (ValueError, TypeError):
+    STREAM_POOL_SIZE = DEFAULT_STREAM_POOL_SIZE
 
 
 class StreamSession:
