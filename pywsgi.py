@@ -14,6 +14,8 @@ import requests
 
 version = "1.26"
 updated_date = "Mar. 11, 2026"
+STARTUP_NETWORK_WAIT_SECONDS = 45
+STARTUP_NETWORK_WAIT_INTERVAL = 5
 
 # Retrieve the port number from env variables
 # Fallback to default if invalid or unspecified
@@ -26,16 +28,6 @@ try:
     channel_start = int(os.environ.get("PLUTO_START", 0))
 except (ValueError, TypeError):
     channel_start = 0
-
-try:
-    network_wait_seconds = max(0, int(os.environ.get("PLUTO_NETWORK_WAIT_SECONDS", 45)))
-except (ValueError, TypeError):
-    network_wait_seconds = 45
-
-try:
-    network_wait_interval = max(1, int(os.environ.get("PLUTO_NETWORK_WAIT_INTERVAL", 5)))
-except (ValueError, TypeError):
-    network_wait_interval = 5
 
 # Get Username and Password from environment variables
 pluto_username = os.environ.get("PLUTO_USERNAME")
@@ -56,11 +48,7 @@ providers = {
 }
 
 def wait_for_pluto_network():
-    if network_wait_seconds <= 0:
-        print("[INFO] Pluto network readiness wait disabled")
-        return
-
-    deadline = time.time() + network_wait_seconds
+    deadline = time.time() + STARTUP_NETWORK_WAIT_SECONDS
     attempt = 0
     url = "https://boot.pluto.tv/v4/start"
 
@@ -80,8 +68,8 @@ def wait_for_pluto_network():
             print(f"[WARN] Pluto network not ready after {attempt} attempts; continuing startup")
             return
 
-        print(f"[WARN] Pluto network not ready (attempt {attempt}: {error}); retrying in {network_wait_interval}s")
-        time.sleep(min(network_wait_interval, remaining))
+        print(f"[WARN] Pluto network not ready (attempt {attempt}: {error}); retrying in {STARTUP_NETWORK_WAIT_INTERVAL}s")
+        time.sleep(min(STARTUP_NETWORK_WAIT_INTERVAL, remaining))
 
 def remove_non_printable(s):
     return ''.join([char for char in s if not unicodedata.category(char).startswith('C')])
