@@ -12,7 +12,7 @@ monkey.patch_all()
 import requests
 
 
-version = "1.26"
+version = "1.27"
 updated_date = "Mar. 11, 2026"
 STARTUP_NETWORK_WAIT_SECONDS = 45
 STARTUP_NETWORK_WAIT_INTERVAL = 5

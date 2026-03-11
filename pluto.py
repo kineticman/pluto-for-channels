@@ -25,6 +25,13 @@ except (ValueError, TypeError):
     STREAM_POOL_SIZE = DEFAULT_STREAM_POOL_SIZE
 
 
+def format_request_error(exc):
+    message = str(exc).strip()
+    if message:
+        return f"Error Exception type: {type(exc).__name__}: {message}"
+    return f"Error Exception type: {type(exc).__name__}"
+
+
 class StreamSession:
     """One 'virtual device' – its own clientID, requests.Session and token cache."""
 
@@ -92,7 +99,7 @@ class StreamSession:
                 params=boot_params,
             )
         except Exception as e:
-            return None, f"Error Exception type: {type(e).__name__}"
+            return None, format_request_error(e)
 
         if 200 <= response.status_code <= 201:
             resp = response.json()
@@ -223,7 +230,7 @@ class Client:
         try:
             response = self.session.get(url, params=params, headers=headers)
         except Exception as e:
-            return None, f"Error Exception type: {type(e).__name__}"
+            return None, format_request_error(e)
 
         if response.status_code != 200:
             return None, f"HTTP failure {response.status_code}: {response.text}"
@@ -235,7 +242,7 @@ class Client:
         try:
             response = self.session.get(category_url, params=params, headers=headers)
         except Exception as e:
-            return None, f"Error Exception type: {type(e).__name__}"
+            return None, format_request_error(e)
 
         if response.status_code != 200:
             return None, f"HTTP failure {response.status_code}: {response.text}"
@@ -380,7 +387,7 @@ class Client:
                 try:
                     response = self.session.get(url, params=epg_params, headers=epg_headers)
                 except Exception as e:
-                    return f"Error Exception type: {type(e).__name__}"
+                    return format_request_error(e)
 
                 if response.status_code != 200:
                     return f"HTTP failure {response.status_code}: {response.text}"

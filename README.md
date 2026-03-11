@@ -1,9 +1,11 @@
 # Pluto for Channels
 
-**Version 1.26**
+**Version 1.27**
 
 # Changes
 
+ - Version 1.27:
+    - **Improved error logging:** Pluto request failures now include the underlying exception message, making DNS, timeout, TLS, and other connectivity problems easier to diagnose.
  - Version 1.26:
     - **EPG startup failure handling:** Prevented scheduler crashes when Pluto boot or EPG requests fail during startup or refresh.
     - **Startup network wait:** Added a bounded Pluto network readiness check before the initial EPG run.
