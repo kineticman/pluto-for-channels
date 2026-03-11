@@ -329,11 +329,11 @@ class Client:
     def update_epg(self, country_code, range_count=3):
         resp, error = self.resp_data(country_code)
         if error:
-            return None, error
+            return error
 
         token = resp.get('sessionToken', None)
         if token is None:
-            return None, error
+            return "Missing sessionToken in boot response"
 
         desired_timezone = pytz.timezone('UTC')
         start_datetime = datetime.now(desired_timezone)
@@ -362,7 +362,7 @@ class Client:
 
         station_list, error = self.channels(country_code)
         if error:
-            return None, error
+            return error
 
         id_values = [d['id'] for d in station_list]
         group_size = 100
@@ -380,10 +380,10 @@ class Client:
                 try:
                     response = self.session.get(url, params=epg_params, headers=epg_headers)
                 except Exception as e:
-                    return None, f"Error Exception type: {type(e).__name__}"
+                    return f"Error Exception type: {type(e).__name__}"
 
                 if response.status_code != 200:
-                    return None, f"HTTP failure {response.status_code}: {response.text}"
+                    return f"HTTP failure {response.status_code}: {response.text}"
                 country_data.append(response.json())
 
             end_time = (
@@ -551,14 +551,16 @@ class Client:
                 return error_code
             station_list, error = self.channels(country_code)
             if error:
-                return None, error
+                return error
             xml_file_path = f"epg-{country_code}.xml"
         elif isinstance(country_code, list):
             xml_file_path = "epg-all.xml"
             station_list, error = self.channels_all()
+            if error:
+                return error
         else:
             print("The variable is neither a string nor a list.")
-            return None
+            return "The variable is neither a string nor a list."
 
         compressed_file_path = f"{xml_file_path}.gz"
         root = ET.Element("tv", attrib={"generator-info-name": "jgomez177", "generated-ts": ""})
@@ -573,6 +575,8 @@ class Client:
             program_data = self.epg_data.get(country_code, [])
         else:
             program_data = self.get_all_epg_data(country_code)
+            if isinstance(program_data, str):
+                return program_data
 
         for elem in program_data:
             root = self.read_epg_data(elem, root)
