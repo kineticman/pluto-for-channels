@@ -1,3 +1,5 @@
+**This is no longer maintained.  I recommend moving over to https://github.com/kineticman/FastChannels
+
 # Pluto for Channels
 
 **Version 1.27**
